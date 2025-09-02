@@ -1,0 +1,21 @@
+services:
+  ignissentinel:
+    build: .
+    container_name: ignissentinel
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      # Bind mounts so user provides .env + model + logs persist
+      - ./Program/config:/app/Program/config
+      - ./Program/logs:/app/Program/logs
+      - ./Program/model:/app/Program/model
+    env_file:
+      - ./Program/config/.env
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
