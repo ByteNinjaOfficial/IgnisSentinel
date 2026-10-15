@@ -25,39 +25,44 @@ It provides:
 
 ## 📦 Quick Start
 
-### 1. Pull the image
+### 1. Pull the Docker Image
 
-```bash
-docker pull byteninja16/ignissentinel
-```
+* **For NVIDIA GPU (CUDA Accelerated):**
+  ```bash
+  docker pull byteninja16/ignissentinel:latest
+  ```
+* **For CPU (Lightweight, No GPU required):**
+  ```bash
+  docker pull byteninja16/ignissentinel:cpu
+  ```
 
-### 2. Create project structure
+### 2. Prepare Project Directory & Volumes
 
 ```bash
 main/
 ├── Program/
 │   ├── config/
-│   │   ├── .env
-│   │   ├── cameras.json
-│   │   └── authorized_users.json
-│   ├── logs/
+│   │   └── .env            # Telegram bot API key & dashboard password
+│   ├── data/               # Persistent SQLite WAL database (cameras, history)
+│   ├── logs/               # Persistent system logs & threat snapshots
+│   │   └── detected_fire/
 │   └── model/
-│       └── best.pt
+│       └── best.pt         # Your trained YOLOv11 model weights
 ```
-
-* **`.env`** → Telegram API key + dashboard password
-* **`cameras.json`** → Define USB/IP/RTSP camera sources
-* **`authorized_users.json`** → Telegram user access
-* **`best.pt`** → Your YOLO model (not included in image)
 
 ### 3. Run with Docker Compose
 
-```bash
-docker compose up -d
-```
+* **Run with GPU (Default):**
+  ```bash
+  docker compose up -d
+  ```
+* **Run with CPU:**
+  ```bash
+  docker compose -f docker-compose.cpu.yml up -d
+  ```
 
-* Web dashboard → [http://localhost:8000/web](http://localhost:8000/web)
-* API root → [http://localhost:8000](http://localhost:8000)
+* Enterprise Dashboard → [http://localhost:8080](http://localhost:8080)
+* Health Check → [http://localhost:8080/health](http://localhost:8080/health)
 
 
 ---

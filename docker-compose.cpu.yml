@@ -1,0 +1,21 @@
+services:
+  # ==========================================================
+  # IgnisSentinel (CPU Optimized - Lightweight)
+  # For non-NVIDIA machines (standard laptops, Mac, Cloud VPS)
+  # Run: docker compose -f docker-compose.cpu.yml up -d
+  # ==========================================================
+  ignissentinel-cpu:
+    image: byteninja16/ignissentinel:cpu
+    container_name: ignissentinel-cpu
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      # Persistent bind mounts: user configuration, SQLite DB, model weights, and logs
+      - ./Program/config:/app/Program/config
+      - ./Program/data:/app/Program/data
+      - ./Program/logs:/app/Program/logs
+      - ./Program/model:/app/Program/model
+    env_file:
+      - path: ./Program/config/.env
+        required: false

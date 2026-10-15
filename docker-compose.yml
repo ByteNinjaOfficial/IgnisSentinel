@@ -1,18 +1,23 @@
 services:
+  # ==========================================================
+  # IgnisSentinel (GPU Accelerated - NVIDIA CUDA)
+  # Default: requires NVIDIA GPU + NVIDIA Container Toolkit
+  # ==========================================================
   ignissentinel:
-    build: .
+    image: byteninja16/ignissentinel:latest
     container_name: ignissentinel
     restart: unless-stopped
     ports:
-      - "8000:8000"
+      - "8080:8080"
     volumes:
-      # Bind mounts so user provides .env + model + database + logs persist
+      # Persistent bind mounts: user configuration, SQLite DB, model weights, and logs
       - ./Program/config:/app/Program/config
       - ./Program/data:/app/Program/data
       - ./Program/logs:/app/Program/logs
       - ./Program/model:/app/Program/model
     env_file:
-      - ./Program/config/.env
+      - path: ./Program/config/.env
+        required: false
     deploy:
       resources:
         reservations:
